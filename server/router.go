@@ -16,8 +16,7 @@ type Router struct {
 
 // TODO matcherFunc matches the handler to the correct API version based on its 'accept' header
 // TODO: refactor matcher function as server.Config
-func matchHandler(r domain.Route, defaultHandler http.HandlerFunc, ctx domain.IContext)
-  func(r *http.Request, rm *mux.RouteMatch) bool {
+func matcherFunc(r domain.Route, defaultHandler http.HandlerFunc, ctx domain.IContext) func(r *http.Request, rm *mux.RouteMatch) bool {
     return func(req *http.Request, rm *mux.RouteMatch) bool {
       rm.Handler = defaultHandler
       return true
@@ -32,7 +31,7 @@ func NewRouter(ctx domain.IContext) *Router {
 
 func (router *Router) AddRoutes(routes *domain.Routes) *Router {
   if routes == nil {
-    return Router
+    return router
   }
   for _, route := range *routes {
     // get the defaultHandler for current route at init time so that we can safely panic
@@ -41,14 +40,13 @@ func (router *Router) AddRoutes(routes *domain.Routes) *Router {
     if !ok {
       // server/router instantiation error
       // its safe to throw panic here
-      panic(errors.New(fmt.Springf("Routes definition error, missing default route handler
-        for version `%v`in `%v`", route.DefaultVersion, route.Name)))
+      panic(errors.New(fmt.Sprintf("Routes definition error, missing default route handler for version `%v`in `%v`", route.DefaultVersion, route.Name)))
     }
-    router
-      .Methods(route.Method)
-      .Path(route.Pattern)
-      .Name(route.Name)
-      .MatcherFunc(matcherFunc(route, defaultHandler, router.ctx))
+    router.
+      Methods(route.Method).
+      Path(route.Pattern).
+      Name(route.Name).
+      MatcherFunc(matcherFunc(route, defaultHandler, router.ctx))
   }
   return router
 }

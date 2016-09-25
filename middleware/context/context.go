@@ -16,7 +16,13 @@ func New() *Context {
 type Context struct {
 }
 
-func (ctx *Context) Inject(handle domain.ContextHandlerFunc) http.HandlerFunc {
+func (ctx *Context) InjectMiddleware(middleware domain.ContextMiddlewareFunc) domain.MiddlewareFunc {
+  return func(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+    middleware(rw, r, next, ctx)
+  }
+}
+
+func (ctx *Context) Inject(handler domain.ContextHandlerFunc) http.HandlerFunc {
   return func(rw http.ResponseWriter, r *http.Request) {
     handler(rw, r, ctx)
   }

@@ -1,15 +1,16 @@
 package server
 
 import (
-  "github.com/urefave/negroni"
+  "github.com/urfave/negroni"
   "github.com/gorilla/context"
+  "gopkg.in/tylerb/graceful.v1"
   "github.com/snozza/rudimentary/domain"
   "net/http"
   "time"
 )
 
 // Request JSON body limit is set at 5mb (currently not enforced)
-const BodyLimitBytes uint32 1048576 * 5
+const BodyLimitBytes uint32 = 1048576 * 5
 
 // Server type
 type Server struct {
@@ -20,8 +21,13 @@ type Server struct {
   timeout time.Duration
 }
 
-// Options for running the server
+// Config type
 type Config struct {
+  Context domain.IContext
+}
+
+// Options for running the server
+type Options struct {
   Timeout time.Duration
   ShutdownHandler func()
 }
@@ -50,6 +56,7 @@ func (s *Server) UseContextMiddleware(middleware domain.IContextMiddleware) *Ser
 func (s *Server) UseRouter(router *Router) *Server {
   // add router and clear mux.context values at the end of request life-times
   s.negroni.UseHandler(context.ClearHandler(router))
+  return s
 }
 
 func (s *Server) Run(address string, options Options) *Server {
@@ -57,7 +64,7 @@ func (s *Server) Run(address string, options Options) *Server {
   s.gracefulServer = &graceful.Server{
     Timeout: options.Timeout,
     Server: &http.Server{Addr: address, Handler: s.negroni},
-    ShutdownInitiated: options.ShutdownHandler
+    ShutdownInitiated: options.ShutdownHandler,
   }
   s.gracefulServer.ListenAndServe()
   return s

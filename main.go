@@ -3,10 +3,11 @@ package main
 import (
   "encoding/json"
   "fmt"
-  "log"
+  "time"
   "net/http"
-  "github.com/snozza/context"
-  "github.com/snozza/mongodb"
+  "github.com/snozza/rudimentary/middleware/context"
+  "github.com/snozza/rudimentary/middleware/mongodb"
+  "github.com/snozza/rudimentary/server"
 )
 
 type Message struct {
@@ -40,12 +41,14 @@ func main() {
 
   db := mongodb.New(&mongodb.Options{
     ServerName: "localhost",
-    DatabaseName: "rudimentary"
+    DatabaseName: "rudimentary",
   })
+
+  _ = db.NewSession()
 
   // init server
   s := server.NewServer(&server.Config{
-      Context: ctx
+      Context: ctx,
   })
 
   // set up router
@@ -54,7 +57,7 @@ func main() {
   s.UseRouter(router)
 
   s.Run(":3001", server.Options{
-    Timeout 10*time.Second,
+    Timeout: 10 * time.Second,
   })
 }
 

@@ -1,4 +1,4 @@
-package  mongodb
+package mongodb
 
 import (
   "net/http"
@@ -27,7 +27,7 @@ type MongoDB struct {
   options *Options
 }
 
-func (db *MongoDb) NewSession() *MongoDBSession {
+func (db *MongoDB) NewSession() *MongoDBSession {
   mongoOptions := db.options
 
   // set default DialTimeout value
@@ -44,21 +44,26 @@ func (db *MongoDb) NewSession() *MongoDBSession {
   return &MongoDBSession{session, mongoOptions}
 }
 
-func (db *MongoDb) FindAll(name string, query domain.Query, result Interface{},
+func (db *MongoDB) FindAll(name string, query domain.Query, result interface{},
   limit int, sort string) error {
-    if sort == "" {
-      sort = "-_id"
-    }
-    return db.currentDb.C(name).Find(query).Sort(sort).Limit(limit).All(result)
+
+  if sort == "" {
+    sort = "-_id"
   }
+  return db.currentDb.C(name).Find(query).Sort(sort).Limit(limit).All(result)
+}
+
+type MongoDBSession struct {
+  *mgo.Session
+  *Options
 }
 
 func (session *MongoDBSession) Handler(w http.ResponseWriter, req *http.Request,
-  next http.HandlerFunc, ctx.domain.IContext) {
+  next http.HandlerFunc, ctx domain.IContext) {
     s := session.Clone()
     defer s.Close()
     db := &MongoDB{
-      currentDB: s.DB(session.DatabaseName)
+      currentDb: s.DB(session.DatabaseName),
     }
     SetMongoDbCtx(ctx, req, db)
     next(w, req)
