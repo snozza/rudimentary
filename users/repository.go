@@ -33,9 +33,7 @@ func (repo *UserRepository) FilterUsers(field string, query string, lastID strin
   // refactor building collection index
   err := repo.DB.EnsureIndex(UsersCollection, mgo.Index{
     Key: []string{
-      "$text:username",
-      "$text:email",
-      "$text:status",
+      "$text:uuid",
     },
     Background: true,
     Sparse: true,
