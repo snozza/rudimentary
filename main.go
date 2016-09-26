@@ -1,38 +1,19 @@
 package main
 
 import (
-  "encoding/json"
   "fmt"
   "time"
   "net/http"
   "github.com/snozza/rudimentary/middleware/context"
   "github.com/snozza/rudimentary/middleware/mongodb"
+  "github.com/snozza/rudimentary/middleware/renderer"
+  "github.com/snozza/rudimentary/users"
   "github.com/snozza/rudimentary/server"
 )
-
-type Message struct {
-  Message string `json:"message"`
-}
-
-type Example struct {
-  Name string
-  Age int
-}
 
 func index(w http.ResponseWriter, r *http.Request) {
   fmt.Println(r.URL.Path);
   fmt.Fprintf(w, "Welcome, %1", r.URL.Path[1:])
-}
-
-func usersHandler(w http.ResponseWriter, r *http.Request) {
-  m := Message{"Welcome to this terrible API, build v0.0.1"}
-  b, err := json.Marshal(m)
-
-  if err != nil {
-    panic(err)
-  }
-
-  w.Write(b);
 }
 
 func main() {
@@ -51,8 +32,21 @@ func main() {
       Context: ctx,
   })
 
+  renderer := renderer.New(&renderer.Options{
+    IndentJSON: true,
+  }, renderer.JSON)
+
+  // set up users resource
+  usersResource := users.NewResource(ctx, &users.Options{
+    Database: db,
+    Renderer: renderer,
+  })
+
   // set up router
   router := server.NewRouter(s.Context)
+
+  // add REST resources to router
+  router.AddResources(usersResource)
 
   s.UseRouter(router)
 

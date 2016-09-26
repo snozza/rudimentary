@@ -53,6 +53,10 @@ func (db *MongoDB) FindAll(name string, query domain.Query, result interface{},
   return db.currentDb.C(name).Find(query).Sort(sort).Limit(limit).All(result)
 }
 
+func (db *MongoDB) EnsureIndex(name string, index mgo.Index) error {
+  return db.currentDb.C(name).EnsureIndex(index)
+}
+
 type MongoDBSession struct {
   *mgo.Session
   *Options
