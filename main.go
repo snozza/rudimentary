@@ -54,24 +54,3 @@ func main() {
     Timeout: 10 * time.Second,
   })
 }
-
-
-  //c := session.DB("rudimentary").C("example")
-  //err = c.Insert(&Example{"Andrew", 15},
-                  //&Example{"Mike", 17})
-  //if err != nil {
-    //log.Fatal(err)
-  //}
-
-  //result := Example{}
-  //err = c.Find(bson.M{"name": "Andrew"}).One(&result)
-  //if err != nil {
-    //log.Fatal(err)
-  //}
-
-  //fmt.Println("Age:", result.Age)
-
-  //http.HandleFunc("/", index)
-  //http.HandleFunc("/about", about)
-  //http.ListenAndServe(":8080", nil)
-//}

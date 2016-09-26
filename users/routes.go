@@ -37,7 +37,7 @@ func (resource *Resource) generateRoutes(basePath string) *domain.Routes {
       DefaultVersion: route.DefaultVersion,
       RouteHandlers: route.RouteHandlers,
     }
-    routes.Append(&domain.Routes{r})
+    routes = routes.Append(&domain.Routes{r})
   }
   resource.routes = &routes
   return resource.routes

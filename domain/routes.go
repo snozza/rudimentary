@@ -1,6 +1,8 @@
 package domain
 
-import "net/http"
+import (
+  "net/http"
+)
 
 type RouteHandlerVersion string
 
