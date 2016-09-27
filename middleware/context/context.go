@@ -2,11 +2,11 @@ package context
 
 import (
   "github.com/gorilla/context"
-  "github.com/snozza/rudimentary/domain"
+  "github.com/snozza/email-ads-data-api/domain"
   "net/http"
 )
 
-const DatabaseKey domain.ContextKey = "rudimentary-mddlwr-context-database-key"
+const DatabaseKey domain.ContextKey = "email-ads-data-api-mddlwr-context-database-key"
 
 func New() *Context {
   return &Context{}

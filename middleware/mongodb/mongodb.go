@@ -2,12 +2,12 @@ package mongodb
 
 import (
   "net/http"
-  "github.com/snozza/rudimentary/domain"
+  "github.com/snozza/email-ads-data-api/domain"
   "gopkg.in/mgo.v2"
   "time"
 )
 
-const MongoDbKey domain.ContextKey = "rudimentary-mongodb-key"
+const MongoDbKey domain.ContextKey = "email-ads-data-api-mongodb-key"
 
 type Options struct {
   ServerName string
@@ -44,13 +44,8 @@ func (db *MongoDB) NewSession() *MongoDBSession {
   return &MongoDBSession{session, mongoOptions}
 }
 
-func (db *MongoDB) FindAll(name string, query domain.Query, result interface{},
-  limit int, sort string) error {
-
-  if sort == "" {
-    sort = "-_id"
-  }
-  return db.currentDb.C(name).Find(query).Sort(sort).Limit(limit).All(result)
+func (db *MongoDB) FindAll(name string, query domain.Query, result interface{}, limit int) error {
+  return db.currentDb.C(name).Find(query).Limit(limit).All(result)
 }
 
 func (db *MongoDB) EnsureIndex(name string, index mgo.Index) error {

@@ -92,4 +92,3 @@ func NewAcceptHeadersFromString(str string) AcceptHeaders {
   }
   return headers
 }
-

@@ -1,20 +1,13 @@
 package main
 
 import (
-  "fmt"
   "time"
-  "net/http"
-  "github.com/snozza/rudimentary/middleware/context"
-  "github.com/snozza/rudimentary/middleware/mongodb"
-  "github.com/snozza/rudimentary/middleware/renderer"
-  "github.com/snozza/rudimentary/users"
-  "github.com/snozza/rudimentary/server"
+  "github.com/snozza/email-ads-data-api/middleware/context"
+  "github.com/snozza/email-ads-data-api/middleware/mongodb"
+  "github.com/snozza/email-ads-data-api/middleware/renderer"
+  "github.com/snozza/email-ads-data-api/users"
+  "github.com/snozza/email-ads-data-api/server"
 )
-
-func index(w http.ResponseWriter, r *http.Request) {
-  fmt.Println(r.URL.Path);
-  fmt.Fprintf(w, "Welcome, %1", r.URL.Path[1:])
-}
 
 func main() {
 

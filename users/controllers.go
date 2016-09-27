@@ -11,9 +11,15 @@ import (
 
 type ListUsersResponse_v0 struct {
   Users Users `json:"users"`
-  LastID string `json:last_id, omitempty"`
-  Message string `json:"message, omitempty"`
+  LastID string `json:"lastId,omitempty"`
+  Message string `json:"message,omitempty"`
   Success bool `json:"success"`
+}
+
+type ListUsersRequest_v0 struct {
+  Uuids []string `json:"uuids"`
+  LastID string `json:"last_id,omitempty"`
+  PerPage string `json:"per_page",omitempty"`
 }
 
 type ErrorResponse_v0 struct {
@@ -40,21 +46,25 @@ func (resource *Resource) RenderError(w http.ResponseWriter, req *http.Request, 
 }
 
 func (resource *Resource) HandleListUsers_v0(w http.ResponseWriter, req *http.Request) {
+  var body ListUsersRequest_v0
+  err := resource.DecodeRequestBody(w, req, &body)
+  if err != nil {
+    return
+  }
+
   repo := resource.UserRepository(req)
 
   // filter & pagination params
-  field := req.FormValue("field")
-  query := req.FormValue("q")
-  lastID := req.FormValue("last_id")
-  perPageStr := req.FormValue("per_page")
-  sort := req.FormValue("sort")
+  uuids := body.Uuids
+  lastID := body.LastID
+  perPageStr := body.PerPage
 
   perPage, err := strconv.Atoi(perPageStr)
   if err != nil {
     perPage = 20
   }
 
-  u := repo.FilterUsers(field, query, lastID, perPage, sort)
+  u := repo.FilterUsers(uuids, lastID, perPage)
   users := *u.(*Users)
   if len(users) > 0 {
     lastID = users[len(users) - 1].ID.Hex()

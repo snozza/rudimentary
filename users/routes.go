@@ -1,7 +1,7 @@
 package users
 
 import (
-  "github.com/snozza/rudimentary/domain"
+  "github.com/snozza/email-ads-data-api/domain"
   "strings"
 )
 
@@ -18,7 +18,7 @@ func (resource *Resource) generateRoutes(basePath string) *domain.Routes {
   var baseRoutes = domain.Routes{
     domain.Route{
       Name: ListUsers,
-      Method: "GET",
+      Method: "POST",
       Pattern: "/api/users",
       DefaultVersion: "0.0",
       RouteHandlers: domain.RouteHandlers{

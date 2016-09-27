@@ -1,7 +1,7 @@
 package users
 
 import (
-  "github.com/snozza/rudimentary/domain"
+  "github.com/snozza/email-ads-data-api/domain"
 )
 
 type IUserRepositoryFactory interface {
@@ -9,5 +9,5 @@ type IUserRepositoryFactory interface {
 }
 
 type IUserRepository interface {
-  FilterUsers(field string, query string, lastID string, limit int, sort string) domain.IUsers
+  FilterUsers(uuids []string, lastID string, limit int) domain.IUsers
 }

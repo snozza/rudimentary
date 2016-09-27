@@ -1,9 +1,9 @@
 package users
 
 import (
-  . "github.com/snozza/rudimentary/users/domain"
+  . "github.com/snozza/email-ads-data-api/users/domain"
 
-  "github.com/snozza/rudimentary/domain"
+  "github.com/snozza/email-ads-data-api/domain"
   "net/http"
 )
 

@@ -1,12 +1,12 @@
 package renderer
 
 import (
-  "github.com/snozza/rudimentary/domain"
+  "github.com/snozza/email-ads-data-api/domain"
   "github.com/unrolled/render"
   "net/http"
 )
 
-const RendererKey domain.ContextKey = "rudimentary-mddlwr-unrolled-render-key"
+const RendererKey domain.ContextKey = "email-ads-data-api-mddlwr-unrolled-render-key"
 const JSON = "json"
 const Text = "text"
 

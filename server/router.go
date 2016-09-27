@@ -4,7 +4,7 @@ import (
   "errors"
   "fmt"
   "github.com/gorilla/mux"
-  "github.com/snozza/rudimentary/domain"
+  "github.com/snozza/email-ads-data-api/domain"
   "net/http"
 )
 

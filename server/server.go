@@ -4,7 +4,7 @@ import (
   "github.com/urfave/negroni"
   "github.com/gorilla/context"
   "gopkg.in/tylerb/graceful.v1"
-  "github.com/snozza/rudimentary/domain"
+  "github.com/snozza/email-ads-data-api/domain"
   "net/http"
   "time"
 )
